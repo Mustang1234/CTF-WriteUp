@@ -1,0 +1,33 @@
+from pwn import *
+p = remote('misc.isangxcaution.xyz', 33002)
+for i in range(50):
+    a=0
+    b=0
+    op=""
+    c=0
+    fdsa=p.recvuntil(b' = ').decode('utf-8')[:-3]
+    print("fdsais",fdsa)
+    for _ in ["+","-","*","/","&","^","%","|"]:
+        if _ in fdsa:
+            op=_
+            a=int(fdsa[:fdsa.find(_)-1])
+            b=int(fdsa[fdsa.find(_)+2:])
+            break
+    if(op=="+"):
+        c=a+b
+    elif(op=="-"):
+        c=a-b
+    elif(op=="*"):
+        c=a*b
+    elif(op=="/"):
+        c=a//b
+    elif(op=="&"):
+        c=a&b
+    elif(op=="^"):
+        c=a^b
+    elif(op=="%"):
+        c=a%b
+    elif(op=="|"):
+        c=a|b
+    p.sendline(str(c))
+print(p.recvuntil(b'}'))
