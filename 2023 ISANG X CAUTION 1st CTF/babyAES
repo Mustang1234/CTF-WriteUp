@@ -1,1 +1,25 @@
+import crypto
+import sys
+sys.modules['Crypto'] = crypto
+from Crypto.Cipher import AES
+import os
 
+
+key = b'\x1d\x42\x86\xa6\xa6\x8f\xff\x1f\x87\x2b\xd6\xdb\xec\x9f'
+iv = b'\x82\x09\x67\xd8\x21\x29\x66\xfb\x83\x71\x33\x25\x5d\x26\xad\xce'
+C1 = "bbac69a1e60d6d242f9c97a9930b2a1b"
+C2 = b'\xd1\xbf\x05\x72\xbe\x22\x8a\x2d\x73\x80\x82\xf3\xa0\xaa\xba\xc1\x7d\x2c\xe5\x8f\xe6\xc4\x34\x4f\x8d\x0d\x3d\x81\x5b\x14\x5d\xe4'
+
+plain1 = b"Happy 2023!".ljust(16)
+plain2 = b'Please Enjoy our first ctf!!'.ljust(32)
+
+for i in range(256*256):
+    KEY=key+i.to_bytes(2, "big")
+    if(AES.new(KEY, AES.MODE_CBC, iv).encrypt(plain1).hex()==C1):
+        key=KEY
+        break
+
+IV=b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+
+flag=int("0x"+plain2.hex(),16)^int("0x"+AES.new(key, AES.MODE_CBC, IV).decrypt(C2).hex(),16)
+print(bytes.fromhex(hex(flag)[2:]))
